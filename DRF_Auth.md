@@ -1,4 +1,3 @@
-# Todos os créditos ao Regis do Python por este documento. (github.com/rg3915)
 # Django Experience #09 - DRF: Entendendo Autenticação
 
 Doc: https://www.django-rest-framework.org/api-guide/authentication/
@@ -169,3 +168,4 @@ Veja os videos
 
 [Dica 49 - DRF: Autenticação via JWT com djoser](https://youtu.be/dOomllYxj9E)
 
+# Todos os créditos ao Regis do Python por este documento. (github.com/rg3915)
