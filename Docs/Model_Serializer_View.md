@@ -11,7 +11,6 @@ Em Django, um Model é a única e definitiva fonte de informações sobre seus d
 
 
 
-## Exemplo:
 
 ```python
 from django.contrib.auth.models import User
@@ -81,3 +80,34 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
         # ou fields = ['username', email...]
 ```
+
+## View
+As Views no Django Rest Framework (DRF) são classes que definem o comportamento de uma API. Elas processam as solicitações HTTP, executam a lógica do negócio e retornam as respostas HTTP. A classe APIView do DRF é uma extensão da classe View do Django, fornecendo funcionalidades adicionais como autenticação, controle de permissões e negociação de conteúdo. As Views são um componente central na criação de APIs com o DRF.
+
+```python
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from main_app.serializers import UserSerializer
+from .models import CustomUser
+
+
+class RegisterView(APIView):
+    def get(self, request):
+        user = CustomUser.objects.all()
+        serializer = UserSerializer(user, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+```
+
+## Explicando o método `GET e POST`
+
+**GET**: Quando uma solicitação GET é recebida, o método **`get`** é chamado. Ele recupera todos os objetos do Model **`CustomUser`** do banco de dados usando **`CustomUser.objects.all()`**. Em seguida, ele usa o **`UserSerializer`** para converter os objetos do modelo em um formato que pode ser convertido em JSON. O parâmetro **`many=True`** indica que vários objetos estão sendo serializados. Finalmente, ele retorna uma resposta HTTP com os dados serializados.
+
+**POST**: Quando uma solicitação POST é recebida, o método **`post`** é chamado. Ele usa o **`UserSerializer`** para validar os dados recebidos na solicitação. Se os dados são válidos, ele salva um novo objeto Model **`CustomUser`** no banco de dados, isso acontece no **`serializer.save()`** e retorna uma resposta HTTP com os dados serializados e um código de status 201, indicando que um novo recurso foi criado com sucesso. Se os dados não são válidos, ele retorna uma resposta HTTP com os erros de validação e um código de status 400, indicando que a solicitação é inválida.
